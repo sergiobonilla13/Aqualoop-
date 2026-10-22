@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQUALOOP - Sistema Modular de Recuperación de Agua Doméstica</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #0F2537;
+            --accent-blue: #0EA5E9;
+            --accent-hover: #0284C7;
+            --light-bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text-main: #0F2537;
+            --text-muted: #334155;
+            --border-color: #E2E8F0;
+            --shadow-sm: 0 4px 6px -1px rgba(15, 37, 55, 0.05), 0 2px 4px -1px rgba(15, 37, 55, 0.03);
+            --shadow-lg: 0 20px 25px -5px rgba(15, 37, 55, 0.08), 0 10px 10px -5px rgba(15, 37, 55, 0.04);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-muted);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--primary-dark);
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* UI Elements */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 1.75rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: var(--transition);
+            cursor: pointer;
+            gap: 0.5rem;
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-dark);
+            border: 1.5px solid #CBD5E1;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-dark);
+            background-color: rgba(15, 37, 55, 0.03);
+            transform: translateY(-2px);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.35rem 0.85rem;
+            background-color: rgba(14, 165, 233, 0.1);
+            color: var(--accent-blue);
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 50px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            box-shadow: var(--shadow-sm);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-mark {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--accent-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            font-size: 0.925rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-blue);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background-color: var(--accent-blue);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary-dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 80px;
+            position: relative;
+            background: radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.06) 0%, transparent 40%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.25rem;
+            letter-spacing: -1.5px;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-content p.support-text {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .hero-attributes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .attribute-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background-color: var(--card-bg);
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .attribute-icon {
+            color: var(--accent-blue);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .attribute-text {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Render Canvas Visualizer */
+        .hero-visual {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .visual-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .visual-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .visual-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .control-btn {
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .control-btn.active {
+            background: var(--primary-dark);
+            color: white;
+            border-color: var(--primary-dark);
+        }
+
+        #bathroomCanvas {
+            width: 100%;
+            height: 380px;
+            border-radius: var(--radius-md);
+            background: #F1F5F9;
+            display: block;
+        }
+
+        .visual-legend {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* Problematic Section */
+        .problem-section {
+            padding: 100px 0;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.25rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .comparison-card {
+            padding: 2.5rem;
+            border-radius: var(--radius-md);
+            position: relative;
+        }
+
+        .comparison-card.old {
+            background-color: #FEF2F2;
+            border: 1px solid #FCA5A5;
+        }
+
+        .comparison-card.new {
+            background-color: #F0F9FF;
+            border: 1px solid #7DD3FC;
+        }
+
+        .card-tag {
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .old .card-tag {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .new .card-tag {
+            background-color: #E0F2FE;
+            color: #0369A1;
+        }
+
+        .comparison-list {
+            margin-top: 1.5rem;
+        }
+
+        .comparison-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        /* Characteristics Section */
+        .features-section {
+            padding: 100px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-blue);
+        }
+
+        .feature-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            background-color: rgba(14, 165, 233, 0.08);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            font-size: 0.925rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .feature-render-space {
+            margin-top: 1.5rem;
+            height: 120px;
+            background: var(--light-bg);
+            border: 1px dashed #CBD5E1;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94A3B8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 5-Step Operation Workflow */
+        .workflow-section {
+            padding: 100px 0;
+            background-color: var(--primary-dark);
+            color: white;
+        }
+
+        .workflow-section h2, .workflow-section .badge {
+            color: white;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .step-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            opacity: 0.8;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .step-card h4 {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-card p {
+            font-size: 0.85rem;
+            color: #94A3B8;
+        }
+
+        /* Modular Configurator Section */
+        .configurator-section {
+            padding: 100px 0;
+            background-color: var(--light-bg);
+        }
+
+        .configurator-box {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .config-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .slider-group {
+            margin-top: 1rem;
+        }
+
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-blue);
+            height: 8px;
+            background: #E2E8F0;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .capacity-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-box {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .modular-render {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 8px;
+            height: 240px;
+            background: #F1F5F9;
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+        }
+
+        .rendered-module {
+            width: 42px;
+            background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
+            border-radius: 8px;
+            border: 2px solid #0F2537;
+            position: relative;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .rendered-module::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            width: 20px;
+            height: 8px;
+            background: #0F2537;
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* MVP Reservation Section */
+        .reservation-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, var(--light-bg) 0%, #E0F2FE 100%);
+            position: relative;
+        }
+
+        .reservation-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 3.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .price-badge {
+            background: #F0F9FF;
+            border: 1px dashed var(--accent-blue);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
+            display: inline-block;
+            margin: 1.5rem 0;
+        }
+
+        .price-amount {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .price-disclaimer {
+            font-size: 0.8rem;
+            color: #64748B;
+            margin-top: 0.25rem;
+        }
+
+        .form-disclaimer {
+            font-size: 0.8rem;
+            color: #64748B;
+            background-color: #F8FAFC;
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            margin-top: 1.5rem;
+            text-align: left;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .reservation-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-input {
+            padding: 0.875rem 1.25rem;
+            border: 1px solid #CBD5E1;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-dark);
+            color: #94A3B8;
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand p {
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            max-width: 300px;
+        }
+
+        .footer-title {
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+            color: #94A3B8;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        /* Modal Feedback */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 37, 55, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--radius-md);
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.9);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            background: #E0F2FE;
+            color: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-grid, .configurator-box {
+                grid-template-columns: 1fr;
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .workflow-steps {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                height: 70px;
+            }
+            .nav-menu {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                box-shadow: var(--shadow-lg);
+                display: none;
+            }
+            .nav-menu.active {
+                display: flex;
+            }
+            .mobile-toggle {
+                display: block;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .hero-attributes {
+                grid-template-columns: 1fr;
+            }
+            .features-grid, .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            .workflow-steps {
+                grid-template-columns: 1fr;
+            }
+            .reservation-form {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <div class="logo-mark">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                    </svg>
+                </div>
+                AQUALOOP
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="#producto" class="nav-link">Producto</a>
+                <a href="#problematica" class="nav-link">Problemática</a>
+                <a href="#funcionamiento" class="nav-link">Funcionamiento</a>
+                <a href="#beneficios" class="nav-link">Beneficios</a>
+                <a href="#caracteristicas" class="nav-link">Características</a>
+            </nav>
+
+            <a href="#reservar" class="btn btn-primary" style="padding: 0.65rem 1.25rem; font-size: 0.875rem;">
+                Quiero reservar AQUALOOP
+            </a>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Hero Section -->
+    <section class="hero" id="producto">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <span class="badge">Innovación en gestión hídrica</span>
+                <h1 style="margin-top: 0.75rem;">Cada litro puede tener un segundo uso</h1>
+                <p class="support-text">
+                    AQUALOOP recupera el agua que normalmente se desperdicia mientras esperas que tu regadera alcance la temperatura ideal. Su sistema modular permite almacenarla y reutilizarla fácilmente, sin alterar significativamente tu rutina diaria.
+                </p>
+
+                <div class="hero-attributes">
+                    <div class="attribute-item">
+                        <div class="attribute-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                        </div>
+                        <div class="attribute-text">Módulos individuales de 5 L</div>
+                    </div>
+                    <div class="attribute-item">
+                        <div class="attribute-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                        </div>
+                        <div class="attribute-text">Kit inicial 3 módulos (15 L)</div>
+                    </div>
+                    <div class="attribute-item">
+                        <div class="attribute-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path></svg>
+                        </div>
+                        <div class="attribute-text">Ampliable hasta 6 módulos (30 L)</div>
+                    </div>
+                    <div class="attribute-item">
+                        <div class="attribute-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v5"></path><path d="M3 11h18v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z"></path></svg>
+                        </div>
+                        <div class="attribute-text">Agarraderas ergonómicas integradas</div>
+                    </div>
+                </div>
+
+                <div class="hero-actions">
+                    <a href="#reservar" class="btn btn-primary">Quiero reservar AQUALOOP</a>
+                    <a href="#funcionamiento" class="btn btn-secondary">Descubre cómo funciona</a>
+                </div>
+            </div>
+
+            <!-- Visual Render / Interactive Prototype Canvas -->
+            <div class="hero-visual">
+                <div class="visual-header">
+                    <span class="visual-title">Render Interactivo - Baño Contemporáneo</span>
+                    <div class="visual-controls">
+                        <button class="control-btn active" id="btnModeCollect">Recuperando</button>
+                        <button class="control-btn" id="btnModeDetach">Módulo Removido</button>
+                    </div>
+                </div>
+
+                <canvas id="bathroomCanvas"></canvas>
+
+                <div class="visual-legend">
+                    <div class="legend-item"><span class="dot" style="background:#0EA5E9"></span> Válvula de Desvío</div>
+                    <div class="legend-item"><span class="dot" style="background:#0F2537"></span> Soporte de Pared</div>
+                    <div class="legend-item"><span class="dot" style="background:#38BDF8"></span> Módulos 5L Removibles</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problematic Section -->
+    <section class="problem-section" id="problematica">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">El Desafío Cotidiano</span>
+                <h2>Sustituyendo la cubeta tradicional por una solución diseñada con intención</h2>
+                <p>Miles de hogares intentan ahorrar agua fría del baño utilizando cubetas estorbosas, incomodas y difíciles de vaciar.</p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-card old">
+                    <span class="card-tag">Método Tradicional (Cubeta)</span>
+                    <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Práctico en intención, incómodo en realidad</h3>
+                    <p style="font-size: 0.9rem; color: #7F1D1D;">El esfuerzo por cuidar el agua no debe implicar incomodidad ni desorden en tu espacio de descanso.</p>
+                    <ul class="comparison-list">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            <span><strong>Carga pesada:</strong> Levantar 10 a 15 kg de agua en un solo volumen.</span>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            <span><strong>Incomodidad:</strong> Obstruye el espacio en regaderas pequeñas.</span>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            <span><strong>Derrames:</strong> Dificultad para trasvasar a inodoros o macetas sin salpicar.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="comparison-card new">
+                    <span class="card-tag">Solución AQUALOOP</span>
+                    <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Ahorro inteligente y diseño modular</h3>
+                    <p style="font-size: 0.9rem; color: #0369A1;">Incorporate a la economía circular doméstica con la elegancia y practicidad que tu hogar merece.</p>
+                    <ul class="comparison-list">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span><strong>Módulos ligeros:</strong> Maneja únicamente 5 kg por módulo de forma ergonómica.</span>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span><strong>Integración estética:</strong> Diseño vertical compacto que limpia visualmente el baño.</span>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span><strong>Vertido preciso:</strong> Boquilla antiderrames lista para WC, riego o limpieza.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Characteristics Section (6 Cards) -->
+    <section class="features-section" id="caracteristicas">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">Atributos del Sistema</span>
+                <h2>Diseñado para la vida real</h2>
+                <p>AQUALOOP combina ingeniería funcional con estética contemporánea.</p>
+            </div>
+
+            <div class="features-grid">
+                <!-- Card 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                    </div>
+                    <h3>Recuperación de agua</h3>
+                    <p>Permite desviar y almacenar el agua fría inicial de la regadera antes de que llegue al drenaje, conservándola limpia para su aprovechamiento en actividades domésticas.</p>
+                    <div class="feature-render-space">[ Espacio Render: Desvío Hídrico ]</div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    </div>
+                    <h3>Diseño modular</h3>
+                    <p>Cada depósito cuenta con una capacidad individual de 5 litros. Amplía tu sistema con módulos adicionales según tus necesidades de almacenamiento y espacio.</p>
+                    <div class="feature-render-space">[ Espacio Render: Ensamble Modular ]</div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v5"></path><path d="M3 11h18v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z"></path></svg>
+                    </div>
+                    <h3>Ergonomía y practicidad</h3>
+                    <p>Los depósitos se retiran fácilmente mediante agarraderas integradas. Permite transportar pesos cómodos de 5 kg en lugar de mover contenedores pesados.</p>
+                    <div class="feature-render-space">[ Espacio Render: Agarradera Ergogrip ]</div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    </div>
+                    <h3>Integración doméstica</h3>
+                    <p>Diseñado para incorporarse armónicamente al espacio del baño. Su perfil compacto y acabados mate eliminan el desorden visual de las cubetas tradicionales.</p>
+                    <div class="feature-render-space">[ Espacio Render: Integración Baño ]</div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    </div>
+                    <h3>Instalación adaptable</h3>
+                    <p>Propuesta de conexión mediante una válvula desviadora de fácil incorporación a instalaciones estándar sin requerir remodelaciones complejas (sujeto a compatibilidad técnica).</p>
+                    <div class="feature-render-space">[ Espacio Render: Conexión Válvula ]</div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <h3>Reutilización cotidiana</h3>
+                    <p>Facilita la aplicación inmediata del agua recuperada en tareas clave del hogar: descargas de sanitario, limpieza de pisos o riego de plantas y jardines.</p>
+                    <div class="feature-render-space">[ Espacio Render: Usos Domésticos ]</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5-Step Operation Workflow -->
+    <section class="workflow-section" id="funcionamiento">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">Flujo Sencillo</span>
+                <h2>Funcionamiento en 5 Pasos</h2>
+                <p style="color: #94A3B8;">Diseñado para integrarse a tu rutina diaria sin pasos complejos.</p>
+            </div>
+
+            <div class="workflow-steps">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <h4>Activa el Desvío</h4>
+                    <p>Gira la válvula AQUALOOP antes de abrir la llave de la regadera.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <h4>Llena los Módulos</h4>
+                    <p>El agua fría fluye directamente hacia los depósitos de 5L de forma silenciosa.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <h4>Disfruta la Duchas</h4>
+                    <p>Cambia la válvula a la regadera en cuanto el agua alcance la temperatura ideal.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">04</div>
+                    <h4>Retira el Módulo</h4>
+                    <p>Toma uno de los módulos por su agarradera cuando lo necesites.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">05</div>
+                    <h4>Reutiliza Fácilmente</h4>
+                    <p>Vierte el agua en el sanitario, cubeta de limpieza o plantas sin salpicaduras.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configurator Section -->
+    <section class="configurator-section" id="beneficios">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">Simulador Interactivo</span>
+                <h2>Configura tu kit AQUALOOP y calcula tu impacto</h2>
+            </div>
+
+            <div class="configurator-box">
+                <div class="config-controls">
+                    <h3>Selecciona el número de módulos</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Adapta la capacidad según el número de personas en tu hogar.</p>
+
+                    <div class="slider-group">
+                        <label for="moduleRange">
+                            <span>Módulos AQUALOOP:</span>
+                            <span id="rangeVal" style="color: var(--accent-blue);">3 Módulos</span>
+                        </label>
+                        <input type="range" id="moduleRange" min="1" max="6" value="3">
+                    </div>
+
+                    <div class="capacity-stats">
+                        <div class="stat-box">
+                            <div class="stat-value" id="capacityVal">15 L</div>
+                            <div class="stat-label">Capacidad Total</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="savingsVal">16,425 L</div>
+                            <div class="stat-label">Ahorro Estimado / Año</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modular-render" id="visualModulesContainer">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MVP Reservation Section -->
+    <section class="reservation-section" id="reservar">
+        <div class="container">
+            <div class="reservation-card">
+                <span class="badge">Validación de Mercado / Fase MVP</span>
+                <h2 style="font-size: 2.25rem; margin-top: 0.5rem;">Sé parte de las primeras pruebas de AQUALOOP</h2>
+                <p style="margin-top: 0.75rem; color: var(--text-muted);">
+                    Estamos perfeccionando el diseño de AQUALOOP para ofrecer la mejor experiencia en el hogar. Regístrate para recibir prioridad cuando el primer lote de producción esté listo.
+                </p>
+
+                <div class="price-badge">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">PRECIO ESTIMADO DE LANZAMIENTO</div>
+                    <div class="price-amount">$3,500 MXN</div>
+                    <div class="price-disclaimer">Kit Inicial (3 Módulos + Válvula de Desvío) *Precio propuesto sujeto a validación final</div>
+                </div>
+
+                <form class="reservation-form" id="reserveForm">
+                    <input type="text" class="form-input" placeholder="Tu nombre completo" required id="userName">
+                    <input type="email" class="form-input" placeholder="Tu correo electrónico" required id="userEmail">
+                    <button type="submit" class="btn btn-primary">Me interesa reservar</button>
+                </form>
+
+                <div class="form-disclaimer">
+                    <strong>Aviso importante de desarrollo:</strong> AQUALOOP se encuentra actualmente en fase de prototipado y validación de diseño. Este registro tiene fines de medición de interés y no constituye una compra ni compromiso financiero. No se solicitará ningún cobro en esta etapa.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo" style="color: white;">
+                        <div class="logo-mark">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                            </svg>
+                        </div>
+                        AQUALOOP
+                    </a>
+                    <p>Redefiniendo la conservación de agua doméstica a través de un diseño funcional, modular y responsable.</p>
+                </div>
+
+                <div>
+                    <div class="footer-title">Navegación</div>
+                    <ul class="footer-links">
+                        <li><a href="#producto">Producto</a></li>
+                        <li><a href="#problematica">Problemática</a></li>
+                        <li><a href="#funcionamiento">Funcionamiento</a></li>
+                        <li><a href="#beneficios">Beneficios</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-title">Producto</div>
+                    <ul class="footer-links">
+                        <li><a href="#caracteristicas">Características</a></li>
+                        <li><a href="#beneficios">Simulador</a></li>
+                        <li><a href="#reservar">Reservar MVP</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-title">Contacto</div>
+                    <ul class="footer-links">
+                        <li><a href="mailto:info@aqualoop.mx">info@aqualoop.mx</a></li>
+                        <li><a href="#">Prototipo de Validación</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2026 AQUALOOP - Proyecto de Desarrollo e Innovación Hídrica. Todos los derechos reservados.</div>
+                <div>Diseño UI/UX Front-End</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Feedback -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <h3 style="margin-bottom: 0.5rem; font-size: 1.5rem;">¡Gracias por tu interés!</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                Tu registro ha sido recibido para fines de validación del proyecto AQUALOOP. Te mantendremos informado sobre nuestros avances en desarrollo.
+            </p>
+            <button class="btn btn-primary" id="btnCloseModal" style="width: 100%;">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Header Scroll Shadow
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 20) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Canvas Bathroom Render Interactive Simulation
+        const canvas = document.getElementById('bathroomCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let isDetached = false;
+        let fillLevel = 0.65;
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            drawBathroom();
+        }
+
+        function drawBathroom() {
+            const w = canvas.getBoundingClientRect().width;
+            const h = canvas.getBoundingClientRect().height;
+
+            // Clear
+            ctx.clearRect(0, 0, w, h);
+
+            // Wall tiles background
+            ctx.fillStyle = '#E2E8F0';
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.strokeStyle = '#CBD5E1';
+            ctx.lineWidth = 1;
+            const tileSize = 40;
+            for (let x = 0; x < w; x += tileSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+            }
+            for (let y = 0; y < h; y += tileSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+            }
+
+            // Shower Head
+            ctx.fillStyle = '#64748B';
+            ctx.fillRect(w / 2 - 40, 30, 80, 10);
+            ctx.fillRect(w / 2 - 5, 0, 10, 30);
+
+            // Shower Pipe & Bypass Valve
+            ctx.fillStyle = '#0EA5E9';
+            ctx.fillRect(w / 2 - 4, 40, 8, h - 140);
+
+            // Diverter Valve Unit
+            ctx.fillStyle = '#0F2537';
+            ctx.beginPath();
+            ctx.arc(w / 2, 120, 14, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Water stream animation
+            if (!isDetached) {
+                ctx.strokeStyle = 'rgba(14, 165, 233, 0.6)';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(w / 2, 120);
+                ctx.lineTo(w / 2 + 50, 120);
+                ctx.lineTo(w / 2 + 50, 180);
+                ctx.stroke();
+            }
+
+            // AQUALOOP Bracket
+            ctx.fillStyle = '#1E293B';
+            ctx.fillRect(w / 2 + 30, 180, 100, 160);
+
+            // Render Modules (3 Units)
+            const modules = [0, 1, 2];
+            modules.forEach((idx) => {
+                const modX = w / 2 + 40 + (idx * 26);
+                const modY = isDetached && idx === 2 ? 260 : 195;
+                const modW = 22;
+                const modH = 130;
+
+                // Module Body
+                ctx.fillStyle = '#FFFFFF';
+                ctx.strokeStyle = '#0F2537';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(modX, modY, modW, modH, 6);
+                ctx.fill();
+                ctx.stroke();
+
+                // Water inside module
+                ctx.fillStyle = 'rgba(14, 165, 233, 0.75)';
+                const waterH = (modH - 8) * fillLevel;
+                ctx.fillRect(modX + 3, modY + modH - 4 - waterH, modW - 6, waterH);
+
+                // Ergonomic Handle
+                ctx.fillStyle = '#0F2537';
+                ctx.fillRect(modX + 6, modY + 10, modW - 12, 12);
+            });
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        setTimeout(resizeCanvas, 100);
+
+        document.getElementById('btnModeCollect').addEventListener('click', function() {
+            isDetached = false;
+            this.classList.add('active');
+            document.getElementById('btnModeDetach').classList.remove('active');
+            drawBathroom();
+        });
+
+        document.getElementById('btnModeDetach').addEventListener('click', function() {
+            isDetached = true;
+            this.classList.add('active');
+            document.getElementById('btnModeCollect').classList.remove('active');
+            drawBathroom();
+        });
+
+        // Modular Configurator Slider Logic
+        const moduleRange = document.getElementById('moduleRange');
+        const rangeVal = document.getElementById('rangeVal');
+        const capacityVal = document.getElementById('capacityVal');
+        const savingsVal = document.getElementById('savingsVal');
+        const visualContainer = document.getElementById('visualModulesContainer');
+
+        function updateConfigurator() {
+            const count = parseInt(moduleRange.value);
+            rangeVal.textContent = `${count} ${count === 1 ? 'Módulo' : 'Módulos'}`;
+            capacityVal.textContent = `${count * 5} L`;
+            
+            // Formula: 3 showers/day * 5L/shower * 365 days = 5,475 L saved per module/yr
+            const annualSavings = (count * 5 * 3 * 365).toLocaleString();
+            savingsVal.textContent = `${annualSavings} L`;
+
+            // Render Modules Visual
+            visualContainer.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const mod = document.createElement('div');
+                mod.className = 'rendered-module';
+                mod.style.height = `${140 + (i % 2) * 10}px`;
+                mod.textContent = '5L';
+                visualContainer.appendChild(mod);
+            }
+        }
+
+        moduleRange.addEventListener('input', updateConfigurator);
+        updateConfigurator();
+
+        // Form handling and Modal Feedback
+        const reserveForm = document.getElementById('reserveForm');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const btnCloseModal = document.getElementById('btnCloseModal');
+
+        reserveForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            modalOverlay.classList.add('active');
+            reserveForm.reset();
+        });
+
+        btnCloseModal.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
