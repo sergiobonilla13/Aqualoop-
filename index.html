@@ -1483,6 +1483,29 @@
         btnCloseModal.addEventListener('click', () => {
             modalOverlay.classList.remove('active');
         });
+        /* Calculador AQUALOOP */
+
+(function () {
+    const slider = document.getElementById('moduleRange');
+    const range = document.getElementById('rangeVal');
+    const capacity = document.getElementById('capacityVal');
+    const savings = document.getElementById('savingsVal');
+
+    if (!slider || !range || !capacity || !savings) return;
+
+    function calcularLitros() {
+        const modulos = Number(slider.value);
+
+        range.textContent = `${modulos} ${modulos === 1 ? 'Módulo' : 'Módulos'}`;
+        capacity.textContent = `${modulos * 5} L`;
+
+        const ahorroAnual = modulos * 5 * 3 * 365;
+        savings.textContent = `${ahorroAnual.toLocaleString('es-MX')} L`;
+    }
+
+    slider.addEventListener('input', calcularLitros);
+    calcularLitros();
+})();
     </script>
 </body>
 </html>
