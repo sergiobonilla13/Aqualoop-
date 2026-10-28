@@ -1455,15 +1455,6 @@
             const annualSavings = (count * 5 * 3 * 365).toLocaleString();
             savingsVal.textContent = `${annualSavings} L`;
 
-            // Render Modules Visual
-            visualContainer.innerHTML = '';
-            for (let i = 0; i < count; i++) {
-                const mod = document.createElement('div');
-                mod.className = 'rendered-module';
-                mod.style.height = `${140 + (i % 2) * 10}px`;
-                mod.textContent = '5L';
-                visualContainer.appendChild(mod);
-            }
         }
 
         moduleRange.addEventListener('input', updateConfigurator);
@@ -1483,29 +1474,7 @@
         btnCloseModal.addEventListener('click', () => {
             modalOverlay.classList.remove('active');
         });
-        /* Calculador AQUALOOP */
 
-(function () {
-    const slider = document.getElementById('moduleRange');
-    const range = document.getElementById('rangeVal');
-    const capacity = document.getElementById('capacityVal');
-    const savings = document.getElementById('savingsVal');
-
-    if (!slider || !range || !capacity || !savings) return;
-
-    function calcularLitros() {
-        const modulos = Number(slider.value);
-
-        range.textContent = `${modulos} ${modulos === 1 ? 'Módulo' : 'Módulos'}`;
-        capacity.textContent = `${modulos * 5} L`;
-
-        const ahorroAnual = modulos * 5 * 3 * 365;
-        savings.textContent = `${ahorroAnual.toLocaleString('es-MX')} L`;
-    }
-
-    slider.addEventListener('input', calcularLitros);
-    calcularLitros();
-})();
     </script>
 </body>
 </html>
