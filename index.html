@@ -895,6 +895,23 @@
 #visualModulesContainer {
     display: none;
 }
+
+        /* Imágenes de la explicación de uso */
+        .step-image {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1.4rem;
+            background: #E2E8F0;
+        }
+        @media (max-width: 1024px) {
+            .step-image { aspect-ratio: 4 / 3; }
+        }
+        @media (max-width: 768px) {
+            .step-image { aspect-ratio: 16 / 10; }
+        }
     </style>
 </head>
 <body>
@@ -1140,26 +1157,31 @@
 
             <div class="workflow-steps">
                 <div class="step-card">
+                    <img class="step-image" src="desviador.png" alt="Paso de funcionamiento AQUALOOP: desviador" loading="lazy">
                     <div class="step-number">01</div>
                     <h4>Activa el Desvío</h4>
                     <p>Gira la válvula AQUALOOP antes de abrir la llave de la regadera.</p>
                 </div>
                 <div class="step-card">
+                    <img class="step-image" src="modular.png" alt="Paso de funcionamiento AQUALOOP: modular" loading="lazy">
                     <div class="step-number">02</div>
                     <h4>Llena los Módulos</h4>
                     <p>El agua fría fluye directamente hacia los depósitos de 5L de forma silenciosa.</p>
                 </div>
                 <div class="step-card">
+                    <img class="step-image" src="disfruta.png" alt="Paso de funcionamiento AQUALOOP: disfruta" loading="lazy">
                     <div class="step-number">03</div>
-                    <h4>Disfruta la Duchas</h4>
+                    <h4>Disfruta tu Ducha</h4>
                     <p>Cambia la válvula a la regadera en cuanto el agua alcance la temperatura ideal.</p>
                 </div>
                 <div class="step-card">
+                    <img class="step-image" src="separado.png" alt="Paso de funcionamiento AQUALOOP: separado" loading="lazy">
                     <div class="step-number">04</div>
                     <h4>Retira el Módulo</h4>
                     <p>Toma uno de los módulos por su agarradera cuando lo necesites.</p>
                 </div>
                 <div class="step-card">
+                    <img class="step-image" src="vacia.png" alt="Paso de funcionamiento AQUALOOP: vacia" loading="lazy">
                     <div class="step-number">05</div>
                     <h4>Reutiliza Fácilmente</h4>
                     <p>Vierte el agua en el sanitario, cubeta de limpieza o plantas sin salpicaduras.</p>
